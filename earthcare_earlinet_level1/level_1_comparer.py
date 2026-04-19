@@ -627,8 +627,6 @@ class EarthCARE_EARLINET_Level1Comparer:
         ground_based_files = files[1]
         files_003 = sorted([file for file in ground_based_files if re.match("ino_003_.*\.nc", os.path.basename(file))])
         files_009 = sorted([file for file in ground_based_files if re.match("ino_009_.*\.nc", os.path.basename(file))])
-        print(files_003)
-        print(files_009)
         if not files_003 or not files_009 or not file_atlid:
             logger.warning(f"[skip] missing ino_003 / ino_009 / ATLID files - {filename_atlid=}")
             return
