@@ -2,9 +2,14 @@
 
 from loguru import logger
 import os
+import sys
 
 logger.remove()
-logger.add("[<level>{level:<8}]</level> | <cyan>{name}</cyan> | <green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green>: <level>{message}</level>")
+logger.add(
+    sys.stderr,
+    level="INFO",
+    format="[<level>{level:<8}]</level> | <cyan>{name}</cyan> | <green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green>: <level>{message}</level>",
+    colorize=True)
 
 GB_LAT = 44.344
 GB_LON = 26.012
