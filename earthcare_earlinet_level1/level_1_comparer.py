@@ -41,7 +41,7 @@ class EarthCARE_EARLINET_Level1Comparer:
         :type radii: Any
 
         :parameter gb: Which profiles to choose from the ground-based measurements - either a time-constrained window,
-                       all of the profiles or both, separately
+                       all the profiles or both, separately
         :type gb: Optional[str], one of ["window", "all", "both"]
 
         :parameter gb_lat: Ground-based station latitude
@@ -433,7 +433,7 @@ class EarthCARE_EARLINET_Level1Comparer:
 
     # One-radius
 
-    def _process_one_radius(self, ds_atlid, ds_003, ds_009, gb_lat, gb_lon,
+    def _process_one_radius(self, ds_atlid, ds_003, ds_009,
                            radius_km, gb_mode, out_dir,
                            smooth_win_m=SMOOTH_WIN_M_DEFAULT,
                            save_plots=False):
@@ -601,8 +601,6 @@ class EarthCARE_EARLINET_Level1Comparer:
                         ds_atlid=ds_atlid,
                         ds_003=ds_003,
                         ds_009=ds_009,
-                        gb_lat=self.gb_lat,
-                        gb_lon=self.gb_lon,
                         radius_km=R,
                         gb_mode=m,
                         out_dir=out_dir,
@@ -642,7 +640,7 @@ class EarthCARE_EARLINET_Level1Comparer:
         ds_atlid = xr.open_dataset(file_atlid, group="ScienceData")
 
         # --- outputs go next to the data
-        out_dir = self.output_directory
+        out_dir = os.path.join(self.output_directory, filename_atlid.split(".")[0])
         os.makedirs(out_dir, exist_ok=True)
 
         # --- run batch
@@ -654,8 +652,6 @@ class EarthCARE_EARLINET_Level1Comparer:
                         ds_atlid=ds_atlid,
                         ds_003=ds_003,
                         ds_009=ds_009,
-                        gb_lat=self.gb_lat,
-                        gb_lon=self.gb_lon,
                         radius_km=R,
                         gb_mode=m,
                         out_dir=out_dir,
