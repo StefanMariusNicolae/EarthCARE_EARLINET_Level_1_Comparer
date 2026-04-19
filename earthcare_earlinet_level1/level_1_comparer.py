@@ -4,8 +4,8 @@ import glob
 import pandas as pd
 import xarray as xr
 import re
-from constants import *
-from utilities import *
+from .constants import *
+from .utilities import *
 
 
 class EarthCARE_EARLINET_Level1Comparer:

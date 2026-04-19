@@ -1,6 +1,6 @@
 # utility functions to be used throughout the project
 import numpy as np
-from constants import EARTH_RADIUS_KM
+from .constants import EARTH_RADIUS_KM
 from scipy import stats as _scipy_stats
 
 def haversine_km(lat1, lon1, lat2, lon2):
