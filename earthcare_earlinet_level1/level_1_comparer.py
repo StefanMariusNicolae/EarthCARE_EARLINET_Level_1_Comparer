@@ -627,6 +627,8 @@ class EarthCARE_EARLINET_Level1Comparer:
         ground_based_files = files[1]
         files_003 = sorted([file for file in ground_based_files if re.match("ino_003_.*\.nc", os.path.basename(file))])
         files_009 = sorted([file for file in ground_based_files if re.match("ino_009_.*\.nc", os.path.basename(file))])
+        print(files_003)
+        print(files_009)
         if not files_003 or not files_009 or not file_atlid:
             logger.warning(f"[skip] missing ino_003 / ino_009 / ATLID files - {filename_atlid=}")
             return
@@ -634,8 +636,21 @@ class EarthCARE_EARLINET_Level1Comparer:
         # --- load datasets
         logger.info(f"\n=== File: {file_atlid.split(os.sep)[-1]} ===")
         logger.info("Loading GB files ...")
-        ds_003 = xr.open_mfdataset(files_003, combine="by_coords")
-        ds_009 = xr.open_mfdataset(files_009, combine="by_coords")
+        try:
+            ds_003 = xr.open_mfdataset(files_003, combine="by_coords")
+        except ValueError:
+            logger.warning(f"Cannot open multiple 003 files, falling back onto opening a single one (check for proper temporal overlap manually!)")
+            logger.warning(f"Files: {files_003}")
+            logger.warning(f"Will proceed with {files_003[0]}")
+            ds_003 = xr.open_dataset(files_003[0])
+        try:
+            ds_009 = xr.open_mfdataset(files_009, combine="by_coords")
+        except ValueError:
+            logger.warning(
+                f"Cannot open multiple 009 files, falling back onto opening a single one (check for proper temporal overlap manually!)")
+            logger.warning(f"Files: {files_009}")
+            logger.warning(f"Will proceed with {files_009[0]}")
+            ds_009 = xr.open_dataset(files_009[0])
         logger.info("Loading ATLID ...")
         ds_atlid = xr.open_dataset(file_atlid, group="ScienceData")
 
