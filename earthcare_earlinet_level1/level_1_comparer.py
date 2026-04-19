@@ -57,6 +57,8 @@ class EarthCARE_EARLINET_Level1Comparer:
         :type save_plots: bool
         ```"""
 
+        self.files = None
+
         if files is not None:
             logger.info("Files were specified. Ignoring 'folders' argument.")
             self.files = files
@@ -74,7 +76,8 @@ class EarthCARE_EARLINET_Level1Comparer:
         elif folder:
             self.folders = [os.path.abspath(folder)]
         else:
-            logger.error(f"Please provide either 'folders' argument or a 'root' and 'glob_pattern' pair.")
+            if self.files is not None:
+                logger.error(f"Please provide either 'folders' argument or a 'root' and 'glob_pattern' pair.")
         self.radii = radii
         self.gb = gb
         self.gb_lat = gb_lat
@@ -622,11 +625,13 @@ class EarthCARE_EARLINET_Level1Comparer:
 
         # --- discover files
         file_atlid = files[0]
+        filename_atlid = os.path.basename(file_atlid)
         ground_based_files = files[1]
         files_003 = sorted([file for file in ground_based_files if re.match("ino_003_.*\.nc", file)])
         files_009 = sorted([file for file in ground_based_files if re.match("ino_009_.*\.nc", file)])
+        print(len(files_003), len(files_009))
         if not files_003 or not files_009 or not file_atlid:
-            logger.warning(f"[skip] missing ino_003 / ino_009 / ATLID files - {files=}")
+            logger.warning(f"[skip] missing ino_003 / ino_009 / ATLID files - {filename_atlid=}")
             return
 
         # --- load datasets
@@ -674,7 +679,9 @@ class EarthCARE_EARLINET_Level1Comparer:
         if self.files is not None:
             for f in self.files:
                 self._run_one_instance(f)
+            logger.success("Done.")
+            return
+
         for f in self.folders:
             self._run_one_folder(f)
-
         logger.success("Done.")
