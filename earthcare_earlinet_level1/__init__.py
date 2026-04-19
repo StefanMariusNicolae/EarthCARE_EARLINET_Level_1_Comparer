@@ -1,1 +1,1 @@
-from level_1_comparer import EarthCARE_EARLINET_Level1Comparer
+from .level_1_comparer import EarthCARE_EARLINET_Level1Comparer
